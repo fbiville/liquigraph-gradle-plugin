@@ -116,27 +116,9 @@ public abstract class LiquiGraphTask extends AbstractTask {
 	}
 
 
-	private File outputDir;
-
-	@OutputDirectory
-	public File getOutputDir() {
-		return outputDir;
-	}
-
-	public void setOutputDir(File outputDir) {
-		this.outputDir = outputDir;
-	}
-
-	private File inputDir;
-
-
-	@InputDirectory
-	public File getInputDir() {
-		return inputDir;
-	}
-
-	public void setInputDir(File inputDir) {
-		this.inputDir = inputDir;
+	@Input
+	public boolean isDebug() {
+		return debug;
 	}
 
 	public void setDebug(boolean debug) {
@@ -145,12 +127,10 @@ public abstract class LiquiGraphTask extends AbstractTask {
 
 	@TaskAction
 	public void executeTask() {
-		String directory = getOutputDir().getAbsolutePath();
-
 		Configuration configuration;
 		try {
 			configuration = withExecutionMode(new ConfigurationBuilder()
-					.withClassLoader(new URLClassLoader(new URL[] {getInputDir().toURI().toURL()}))
+					.withClassLoader(new URLClassLoader(new URL[] {getProject().getBuildDir().toURI().toURL()}))
 					.withExecutionContexts(executionContexts(executionContexts))
 					.withMasterChangelogLocation(changelog)
 					.withUsername(username)
@@ -158,7 +138,6 @@ public abstract class LiquiGraphTask extends AbstractTask {
 					.withUri(jdbcUri))
 					.build();
 
-			LOGGER.info("Generating Cypher output file in directory: " + directory);
 			new Liquigraph().runMigrations(configuration);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
