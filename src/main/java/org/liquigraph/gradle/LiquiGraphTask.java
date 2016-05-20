@@ -65,7 +65,6 @@ public abstract class LiquiGraphTask extends AbstractTask {
 	 */
 	//    @Parameter(property = "executionContexts", defaultValue = "")
 	private String executionContexts = "";
-	private boolean debug;
 
 	@Input
 	public String getChangelog() {
@@ -113,16 +112,6 @@ public abstract class LiquiGraphTask extends AbstractTask {
 
 	public void setExecutionContexts(String executionContexts) {
 		this.executionContexts = executionContexts;
-	}
-
-
-	@Input
-	public boolean isDebug() {
-		return debug;
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
 	}
 
 	@TaskAction

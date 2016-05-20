@@ -34,7 +34,7 @@ public class LiquiGraphTaskDryRun extends LiquiGraphTask{
         } else {
             path = getProject().getBuildDir().toPath().resolve("liquigraph");
             try {
-                path = Files.createDirectory(path);
+                path = Files.createDirectories(path);
             } catch (IOException e) {
                 getLogger().error("Can't create dry run result directory", e);
             }
