@@ -12,8 +12,10 @@ import java.nio.file.Path;
 
 public class LiquiGraphTaskDryRun extends LiquiGraphTask{
 
-
-    File destinationDir;
+	/**
+	 * Output directory for dumped data of the dry run
+	 */
+    private File destinationDir;
 
     @OutputDirectory
     @Optional

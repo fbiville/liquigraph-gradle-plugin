@@ -3,7 +3,6 @@ package org.liquigraph.gradle;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,9 +12,7 @@ import java.util.Collection;
 import org.gradle.api.GradleException;
 import org.gradle.api.internal.AbstractTask;
 import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.Optional;
-import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 import org.liquigraph.core.api.Liquigraph;
 import org.liquigraph.core.configuration.Configuration;
@@ -127,9 +124,18 @@ public abstract class LiquiGraphTask extends AbstractTask {
 					.withUri(jdbcUri))
 					.build();
 
+			LOGGER.info("Run liquid graph migration with {}", getProject().getBuildDir());
+			LOGGER.debug("Run liquid graph migration with :\n"
+					+ "\tbuild dir {}\n"
+					+ "\texecution context {}\n"
+					+ "\tchangelog {}\n"
+					+ "\tusername {}\n"
+					+ "\tpassword {}\n"
+					+ "\tjdbc URI {}\n"
+					, getProject().getBuildDir(), executionContexts, changelog, username, "******", jdbcUri);
 			new Liquigraph().runMigrations(configuration);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			LOGGER.error("Error durring liquid graph migration", e);
 			throw new GradleException(e.getMessage());
 		}
 
