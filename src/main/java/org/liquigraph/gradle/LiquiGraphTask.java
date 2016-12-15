@@ -4,6 +4,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -115,8 +117,9 @@ public abstract class LiquiGraphTask extends AbstractTask {
 	public void executeTask() {
 		Configuration configuration;
 		try {
+			URL url = getProject().getBuildDir().getParentFile().toURI().toURL();
 			configuration = withExecutionMode(new ConfigurationBuilder()
-					.withClassLoader(new URLClassLoader(new URL[] {getProject().getBuildDir().toURI().toURL()}))
+					.withClassLoader(new URLClassLoader(new URL[] {url}))
 					.withExecutionContexts(executionContexts(executionContexts))
 					.withMasterChangelogLocation(changelog)
 					.withUsername(username)
@@ -138,8 +141,6 @@ public abstract class LiquiGraphTask extends AbstractTask {
 			LOGGER.error("Error durring liquid graph migration", e);
 			throw new GradleException(e.getMessage());
 		}
-
-
 	}
 
 	protected abstract ConfigurationBuilder withExecutionMode(ConfigurationBuilder configurationBuilder);

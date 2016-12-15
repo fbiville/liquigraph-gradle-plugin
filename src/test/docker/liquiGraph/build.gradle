@@ -1,0 +1,21 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.org.liquigraph:liquigraph-gradle-plugin:3.0.9-SNAPSHOT"
+  }
+}
+
+apply plugin: "org.liquigraph.gradle"
+
+task testV1(type: org.liquigraph.gradle.LiquiGraphTaskRun) {
+	//inputDir= file('.')
+	//outputDir= file("log")
+	changelog= 'changelog.xml'
+	jdbcUri= 'jdbc:neo4j:http://neo4j:7474'
+	username='neo4j'
+	password='password'
+}
