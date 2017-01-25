@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class LiquiGraphTaskDryRun extends LiquiGraphTask{
+public class LiquigraphTaskDryRun extends LiquigraphTask {
 
 	/**
 	 * Output directory for dumped data of the dry run

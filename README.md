@@ -1,4 +1,4 @@
-# LiquiGraph Gradle Plugin
+# Liquigraph Gradle Plugin
 
 ## Overview
 
@@ -7,14 +7,14 @@
 1. Build project `gradle build install`
 2. Add the plugin to your own build.gradle
 3. Create a task derived from :
-    + `org.liquigraph.gradle.LiquiGraphTaskDryRun` if you need to test your changelog
-    + `org.liquigraph.gradle.LiquiGraphTaskRun` to execute your changelog
+    + `org.liquigraph.gradle.LiquigraphTaskDryRun` if you need to test your changelog
+    + `org.liquigraph.gradle.LiquigraphTaskRun` to execute your changelog
 
 4. Set the appropriate parameters
 5. **You have to copy your changelog into the build directory**
 
 ## Parameters
-Please refer to the [liquid graph documentation](http://fbiville.github.io/liquigraph/) for details of options and change log syntax.
+Please refer to [Liquigraph documentation](https://liquigraph.github.io/) for details of options and change log syntax.
 
 | Name      | Description         | 
 |-----------|---------------------|
@@ -42,10 +42,10 @@ buildscript {
 }
 apply plugin: 'org.liquigraph.gradle'
 
-task liquidTest(type: org.liquigraph.gradle.LiquiGraphTaskDryRun) {
+task dryRunMigrations(type: org.liquigraph.gradle.LiquigraphTaskDryRun) {
     changelog = "changelog.xml"
     jdbcUri = "jdbc:neo4j://localhost:7474"
     username = "neo4j"
-    password = "didier"
+    password = "changeme"
 }
 ```

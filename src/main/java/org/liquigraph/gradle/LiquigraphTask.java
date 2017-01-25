@@ -4,10 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,13 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public abstract class LiquiGraphTask extends AbstractTask {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiquiGraphTask.class);
+public abstract class LiquigraphTask extends AbstractTask {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LiquigraphTask.class);
 
 	/**
 	 * Classpath location of the master changelog file
 	 */
-	//    @Parameter(property = "changelog", required = true)
 	private String changelog;
 
 	/**
@@ -41,19 +37,16 @@ public abstract class LiquiGraphTask extends AbstractTask {
 	 *  <li>jdbc:neo4j:mem:name</li>
 	 * </ul>
 	 */
-	//    @Parameter(property = "jdbcUri", required = true)
 	private String jdbcUri;
 
 	/**
 	 * Graph connection username.
 	 */
-	//    @Parameter(property = "username")
 	private String username;
 
 	/**
 	 * Graph connection password.
 	 */
-	//    @Parameter(property = "password")
 	private String password;
 
 	/**
@@ -62,7 +55,6 @@ public abstract class LiquiGraphTask extends AbstractTask {
 	 * If contexts are defined, all Liquigraph changesets whose at least 1 declared context will match.
 	 * Please note that Liquigraph changesets that define no context will always match.
 	 */
-	//    @Parameter(property = "executionContexts", defaultValue = "")
 	private String executionContexts = "";
 
 	@Input
@@ -119,7 +111,7 @@ public abstract class LiquiGraphTask extends AbstractTask {
 		try {
 			URL url = getProject().getBuildDir().getParentFile().toURI().toURL();
 			configuration = withExecutionMode(new ConfigurationBuilder()
-					.withClassLoader(new URLClassLoader(new URL[] {url}))
+					.withChangelogLoader(changelogFilename -> this.getClass().getResourceAsStream(changelogFilename))
 					.withExecutionContexts(executionContexts(executionContexts))
 					.withMasterChangelogLocation(changelog)
 					.withUsername(username)
@@ -127,8 +119,7 @@ public abstract class LiquiGraphTask extends AbstractTask {
 					.withUri(jdbcUri))
 					.build();
 
-			LOGGER.info("Run liquid graph migration with {}", getProject().getBuildDir());
-			LOGGER.debug("Run liquid graph migration with :\n"
+			LOGGER.debug("Running Liquigraph migration with :\n"
 					+ "\tbuild dir {}\n"
 					+ "\texecution context {}\n"
 					+ "\tchangelog {}\n"
@@ -136,6 +127,7 @@ public abstract class LiquiGraphTask extends AbstractTask {
 					+ "\tpassword {}\n"
 					+ "\tjdbc URI {}\n"
 					, getProject().getBuildDir(), executionContexts, changelog, username, "******", jdbcUri);
+
 			new Liquigraph().runMigrations(configuration);
 		} catch (MalformedURLException e) {
 			LOGGER.error("Error durring liquid graph migration", e);
@@ -155,4 +147,5 @@ public abstract class LiquiGraphTask extends AbstractTask {
 		}
 		return result;
 	}
+
 }
