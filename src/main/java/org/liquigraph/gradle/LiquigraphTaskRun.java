@@ -3,7 +3,7 @@ package org.liquigraph.gradle;
 
 import org.liquigraph.core.configuration.ConfigurationBuilder;
 
-public class LiquiGraphTaskRun extends LiquiGraphTask{
+public class LiquigraphTaskRun extends LiquigraphTask {
     @Override
     protected ConfigurationBuilder withExecutionMode(ConfigurationBuilder configurationBuilder) {
         return configurationBuilder.withRunMode();

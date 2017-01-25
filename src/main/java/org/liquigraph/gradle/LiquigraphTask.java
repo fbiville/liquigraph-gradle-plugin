@@ -4,8 +4,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -23,8 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public abstract class LiquiGraphTask extends AbstractTask {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiquiGraphTask.class);
+public abstract class LiquigraphTask extends AbstractTask {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LiquigraphTask.class);
 
 	/**
 	 * Classpath location of the master changelog file

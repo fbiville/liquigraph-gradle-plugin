@@ -47,7 +47,7 @@ public class TestGradlePlugin {
 		String buildFileContent = "import org.liquigraph.gradle.*"
 				+ "\n plugins {"
 				+ "\n id 'org.liquigraph.gradle'}" +
-				"\n task testV1(type: LiquiGraphTask) {" +
+				"\n task testV1(type: LiquigraphTask) {" +
 				"\n    inputDir= file('.')"+
 				"\n    outputDir= file(\"$buildDir/log\")"+
 				"\n    changelog= 'changelog.xml'"+
