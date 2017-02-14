@@ -31,34 +31,19 @@ import static org.junit.Assert.assertTrue;
 public class LiquigraphPluginTest {
 
 	@Rule public final TemporaryFolder testProjectDir = new TemporaryFolder();
-	private File buildFile;
     private File storeDirectory;
 
     @Before
 	public void prepare() throws IOException {
-		testProjectDir.create();
-		buildFile = testProjectDir.newFile("build.gradle");
-        storeDirectory = testProjectDir.newFolder("neo4j");
+        writeBuildFile();
     }
 
-	@Test
+    @Test
 	public void should_perform_migrations() throws Exception {
-        String dbPath = storeDirectory.getCanonicalPath().replace("\\", "/");
-        String buildFileContent = "import org.liquigraph.gradle.*\n" +
-                "\n" +
-                "plugins {id 'org.liquigraph.gradle'}\n" +
-                "\n" +
-                "task runMigrations(type: LiquigraphTaskRun) {\n" +
-                "    changelog= 'changelog.xml'\n" +
-                "    jdbcUri= 'jdbc:neo4j:file: " + dbPath + "'\n" +
-                "}";
-
-		Files.write(buildFile.toPath(), buildFileContent.getBytes("UTF-8"));
-
 		BuildResult result = GradleRunner.create()
                     .withProjectDir(testProjectDir.getRoot())
                     .withArguments("runMigrations")
-                    .withPluginClasspath(readFromGeneratedFile())
+                    .withPluginClasspath()
                     .withDebug(false)
                     .build();
 
@@ -80,12 +65,20 @@ public class LiquigraphPluginTest {
         }
     }
 
-    private Iterable<File> readFromGeneratedFile() throws URISyntaxException, IOException {
-        Collection<File> result = new ArrayList<>();
-        Path path = Paths.get(this.getClass().getResource("/plugin-metadata.properties").toURI());
-        for (String absolutePath : Files.readAllLines(path, Charset.forName("UTF-8"))) {
-            result.add(new File(absolutePath));
-        }
-        return result;
+    private void writeBuildFile() throws IOException {
+        testProjectDir.create();
+        File buildFile = testProjectDir.newFile("build.gradle");
+        storeDirectory = testProjectDir.newFolder("neo4j");
+        String dbPath = storeDirectory.getCanonicalPath().replace("\\", "/");
+        String buildFileContent = "import org.liquigraph.gradle.*\n" +
+                "\n" +
+                "plugins {id 'org.liquigraph.gradle'}\n" +
+                "\n" +
+                "task runMigrations(type: LiquigraphTaskRun) {\n" +
+                "    changelog= 'changelog.xml'\n" +
+                "    jdbcUri= 'jdbc:neo4j:file: " + dbPath + "'\n" +
+                "}";
+
+        Files.write(buildFile.toPath(), buildFileContent.getBytes("UTF-8"));
     }
 }

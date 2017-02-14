@@ -49,11 +49,11 @@ task createClasspathManifest {
 
     doLast {
         outputDir.mkdirs()
-        def pluginClasspath = file("$outputDir/plugin-metadata.properties")
-        def classpaths = sourceSets.main.runtimeClasspath.findAll {it.getPath().contains("xerces")}.join("\n")
-        classpaths += "\n" + sourceSets.main.runtimeClasspath.findAll {!it.getPath().contains("xerces")} .join("\n")
-        classpaths += "\n" + sourceSets.test.resources.collect { it.getParent() } .join("\n")
-        pluginClasspath.text = classpaths
+        def classpathSeparator = System.getProperty("path.separator")
+        def pluginClasspath = file("$outputDir/plugin-under-test-metadata.properties")
+        def classpaths = sourceSets.main.runtimeClasspath.join(classpathSeparator)
+        classpaths +=    classpathSeparator + sourceSets.test.resources.collect { it.getParent() }.join(classpathSeparator)
+        pluginClasspath.text = "implementation-classpath=" + classpaths
     }
 }
 
